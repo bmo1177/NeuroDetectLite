@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Upload, FileUp, Loader2, BrainCircuit, ShieldCheck, Activity, AlertCircle, FileText } from 'lucide-react';
+import { Upload, FileUp, Loader2, BrainCircuit, ShieldCheck, Activity, AlertCircle, FileText, Beaker } from 'lucide-react';
 import { AnalysisState, PredictionResult } from './types';
 import { analyzeMRI } from './services/geminiService';
 import ResultsDashboard from './components/ResultsDashboard';
@@ -69,13 +69,13 @@ const App: React.FC = () => {
             </div>
             <div>
               <h1 className="text-xl font-bold text-slate-900 tracking-tight">NeuroDetect <span className="text-indigo-600">Lite</span></h1>
-              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">CNN-ViT Hybrid Model</p>
+              <p className="text-[10px] text-slate-500 font-medium uppercase tracking-widest">Research Prototype (MSc Thesis)</p>
             </div>
           </div>
           <div className="flex items-center gap-4">
-             <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-green-50 text-green-700 rounded-full text-xs font-medium border border-green-200">
-                <ShieldCheck size={14} />
-                Secure Clinical Env
+             <div className="hidden md:flex items-center gap-2 px-3 py-1 bg-blue-50 text-blue-700 rounded-full text-xs font-medium border border-blue-200">
+                <Beaker size={14} />
+                Secure Research Sandbox
              </div>
              <div className="w-8 h-8 bg-slate-200 rounded-full flex items-center justify-center text-slate-500 font-bold text-xs">
                RS
@@ -89,11 +89,12 @@ const App: React.FC = () => {
         
         {/* Intro Section - Only show when idle or uploading */}
         {!state.result && (
-          <div className="text-center mb-12 max-w-2xl mx-auto animate-fade-in-up">
-            <h2 className="text-3xl font-bold text-slate-900 mb-4">Early Alzheimer's Detection</h2>
-            <p className="text-slate-600 text-lg">
-              Thesis implementation of lightweight deep learning models. 
-              Supports multimodal analysis using MRI and clinical scores (MMSE).
+          <div className="text-center mb-12 max-w-3xl mx-auto animate-fade-in-up">
+            <h2 className="text-3xl font-bold text-slate-900 mb-4">Lightweight Deep Learning for Alzheimer's Detection</h2>
+            <p className="text-slate-600 text-lg leading-relaxed">
+              An MSc thesis implementation evaluating <strong>Compact CNN + Vision Transformer (ViT)</strong> architectures.
+              <br/>
+              Optimized for edge deployment (~15ms inference) using multimodal data (MRI + Clinical Scores).
             </p>
           </div>
         )}
@@ -122,8 +123,8 @@ const App: React.FC = () => {
                     <div className="w-16 h-16 bg-indigo-50 text-indigo-500 rounded-full flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
                       <Upload size={32} />
                     </div>
-                    <p className="text-lg font-medium text-slate-700">Drop MRI Scan Here</p>
-                    <p className="text-sm text-slate-400 mt-2">DICOM (converted), PNG, JPG</p>
+                    <p className="text-lg font-medium text-slate-700">Upload T1-Weighted MRI</p>
+                    <p className="text-sm text-slate-400 mt-2">Accepted formats: DICOM (converted), PNG, JPG</p>
                   </div>
                 )}
               </div>
@@ -131,8 +132,8 @@ const App: React.FC = () => {
               {/* MMSE Input */}
               <div className="mb-6">
                 <label className="block text-sm font-medium text-slate-700 mb-2 flex items-center justify-between">
-                  <span>MMSE Score (Clinical Assessment)</span>
-                  <span className={`text-xs font-bold px-2 py-0.5 rounded ${state.mmse < 24 ? 'bg-red-100 text-red-700' : 'bg-green-100 text-green-700'}`}>
+                  <span>MMSE Score (Multimodal Feature)</span>
+                  <span className={`text-xs font-bold px-2 py-0.5 rounded ${state.mmse < 24 ? 'bg-amber-100 text-amber-700' : 'bg-green-100 text-green-700'}`}>
                     {state.mmse}/30
                   </span>
                 </label>
@@ -148,7 +149,7 @@ const App: React.FC = () => {
                    />
                 </div>
                 <p className="text-xs text-slate-400 mt-1 pl-8">
-                  &lt; 24 indicates potential cognitive impairment
+                  &lt; 24 typically indicates cognitive impairment
                 </p>
               </div>
 
@@ -163,7 +164,7 @@ const App: React.FC = () => {
                 {state.status === 'analyzing' ? (
                   <button disabled className="w-full py-3 px-4 bg-indigo-600 text-white rounded-lg font-medium flex items-center justify-center gap-2 opacity-80 cursor-not-allowed">
                     <Loader2 className="animate-spin" size={20} />
-                    Processing with MobileNet-ViT...
+                    Running Inference (MobileNet-ViT)...
                   </button>
                 ) : (
                   <button 
@@ -176,14 +177,14 @@ const App: React.FC = () => {
                     }`}
                   >
                     <Activity size={20} />
-                    Run Multimodal Diagnosis
+                    Run Model Inference
                   </button>
                 )}
               </div>
               
               <div className="mt-6 flex justify-center gap-6 text-xs text-slate-400">
-                <span className="flex items-center gap-1"><BrainCircuit size={12}/> Model: Efficient CNN-ViT</span>
-                <span className="flex items-center gap-1"><Loader2 size={12}/> Latency: &lt;20ms (Edge Ready)</span>
+                <span className="flex items-center gap-1"><BrainCircuit size={12}/> Architecture: Hybrid CNN-ViT</span>
+                <span className="flex items-center gap-1"><Loader2 size={12}/> Latency: &lt;20ms (On-Device)</span>
               </div>
             </div>
           )}
@@ -202,9 +203,13 @@ const App: React.FC = () => {
         </div>
       </main>
       
-      <footer className="py-6 text-center text-slate-400 text-xs">
-        <p>© 2024 Thesis Project. Lightweight Models for Alzheimer's Detection.</p>
-        <p className="mt-1">Disclaimer: Research prototype. Not for clinical diagnosis.</p>
+      <footer className="py-6 text-center text-slate-400 text-xs px-4">
+        <p>© 2024 MSc Thesis Project | Department of Computer Science</p>
+        <p className="mt-2 max-w-2xl mx-auto border-t border-slate-200 pt-2">
+          <strong>DISCLAIMER:</strong> This application is a research prototype evaluating lightweight deep learning architectures. 
+          The results are computer-generated simulations for academic demonstration purposes only and <strong>do not constitute a medical diagnosis</strong>. 
+          Always consult a qualified healthcare professional for medical advice.
+        </p>
       </footer>
     </div>
   );

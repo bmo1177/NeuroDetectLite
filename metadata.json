@@ -1,5 +1,5 @@
 {
-  "name": "Lightweight Alzheimer's Detection",
-  "description": "Thesis Project: Lightweight Deep Learning Models for Early Alzheimer’s Detection using multimodal data.",
+  "name": "NeuroDetect Lite (Research)",
+  "description": "MSc Thesis Prototype: Lightweight Deep Learning for Alzheimer’s Classification using MRI and MMSE scores.",
   "requestFramePermissions": []
 }

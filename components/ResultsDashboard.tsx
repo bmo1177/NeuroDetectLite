@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { PredictionResult, AlzheimerClass } from '../types';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, Cell } from 'recharts';
-import { Activity, Brain, FileText, AlertCircle, Info, Zap } from 'lucide-react';
+import { Activity, Brain, FileText, AlertCircle, Info, Zap, Microscope } from 'lucide-react';
 
 interface ResultsDashboardProps {
   result: PredictionResult;
@@ -41,7 +41,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
           }`}
         >
           <Activity size={18} />
-          Diagnostic & Multimodal Analysis
+          Inference & Multimodal Analysis
         </button>
         <button
           onClick={() => setActiveTab('xai')}
@@ -52,7 +52,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
           }`}
         >
           <Brain size={18} />
-          Saliency & Attention (XAI)
+          XAI & Saliency Maps
         </button>
       </div>
 
@@ -68,15 +68,15 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                 <div className="bg-slate-100 rounded-lg p-1 border border-slate-200 aspect-square relative flex items-center justify-center overflow-hidden">
                    <img src={imageSrc} alt="MRI Scan" className="object-contain max-w-full max-h-full" />
                    <div className="absolute top-3 left-3 bg-black/70 text-white text-xs px-2 py-1 rounded backdrop-blur-sm">
-                     Input: T1-Weighted MRI
+                     Input: T1-Weighted MRI (Preprocessed)
                    </div>
                 </div>
                 <div className="bg-slate-50 p-4 rounded-lg border border-slate-200 flex justify-between items-center">
                    <div>
-                     <span className="text-xs font-semibold text-slate-500 uppercase">Clinical Input</span>
+                     <span className="text-xs font-semibold text-slate-500 uppercase">Multimodal Feature</span>
                      <div className="font-medium text-slate-800">MMSE Score</div>
                    </div>
-                   <div className={`text-2xl font-bold ${mmseScore < 24 ? 'text-red-600' : 'text-green-600'}`}>
+                   <div className={`text-2xl font-bold ${mmseScore < 24 ? 'text-amber-600' : 'text-green-600'}`}>
                      {mmseScore}/30
                    </div>
                 </div>
@@ -85,26 +85,26 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
               {/* Stats */}
               <div className="flex flex-col justify-center space-y-6">
                 <div className="bg-slate-50 p-5 rounded-lg border border-slate-200">
-                  <h3 className="text-slate-500 text-sm font-medium uppercase tracking-wider mb-1">Model Prediction</h3>
+                  <h3 className="text-slate-500 text-sm font-medium uppercase tracking-wider mb-1">Predicted Class</h3>
                   <div className="flex items-center gap-3 flex-wrap">
                     <span className={`text-2xl font-bold ${
-                      result.diagnosis === AlzheimerClass.CN ? 'text-green-600' : result.diagnosis === AlzheimerClass.MCI ? 'text-yellow-600' : 'text-red-600'
+                      result.diagnosis === AlzheimerClass.CN ? 'text-green-600' : result.diagnosis === AlzheimerClass.MCI ? 'text-amber-600' : 'text-red-600'
                     }`}>
                       {result.diagnosis}
                     </span>
                     {result.diagnosis !== AlzheimerClass.CN && (
-                      <span className="px-2 py-1 bg-red-100 text-red-700 text-xs font-bold rounded-full animate-pulse">
-                        Early Detection
+                      <span className="px-2 py-1 bg-amber-100 text-amber-700 text-xs font-bold rounded-full">
+                         Target Pattern Detected
                       </span>
                     )}
                   </div>
                   <p className="text-slate-600 text-sm mt-2 leading-relaxed">
-                    Hybrid CNN-ViT Architecture confidence: <strong>{(result.confidence * 100).toFixed(1)}%</strong>
+                    Hybrid CNN-ViT Model Confidence: <strong>{(result.confidence * 100).toFixed(1)}%</strong>
                   </p>
                 </div>
 
                 <div className="h-64 w-full">
-                  <h4 className="text-sm font-medium text-slate-700 mb-4">Class Probability Distribution</h4>
+                  <h4 className="text-sm font-medium text-slate-700 mb-4">Softmax Probability Distribution</h4>
                   <ResponsiveContainer width="100%" height="100%">
                     <BarChart data={chartData} layout="vertical" margin={{ top: 5, right: 30, left: 40, bottom: 5 }}>
                       <CartesianGrid strokeDasharray="3 3" horizontal={false} stroke="#e2e8f0" />
@@ -139,14 +139,14 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             <div className="bg-blue-50 border border-blue-100 rounded-lg p-4 flex gap-3">
               <Info className="text-blue-600 shrink-0 mt-0.5" size={20} />
               <div>
-                <h4 className="font-semibold text-blue-900 text-sm">Clinical Interpretation</h4>
+                <h4 className="font-semibold text-blue-900 text-sm">Model Interpretation (Automated)</h4>
                 <p className="text-blue-800 text-sm mt-1">{result.explanation}</p>
               </div>
             </div>
             
             <div className="flex gap-4 text-xs text-slate-400 justify-center border-t border-slate-100 pt-4">
-               <div className="flex items-center gap-1"><Zap size={12}/> Inference: ~15ms</div>
-               <div className="flex items-center gap-1"><Brain size={12}/> Model: MobileNetV3-ViT Hybrid</div>
+               <div className="flex items-center gap-1"><Zap size={12}/> Inference Time: ~15ms (Edge)</div>
+               <div className="flex items-center gap-1"><Brain size={12}/> Architecture: MobileNetV3 + ViT</div>
             </div>
           </div>
         )}
@@ -156,11 +156,11 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
           <div className="space-y-6">
             <div className="flex justify-between items-center">
               <h3 className="text-lg font-bold text-slate-800 flex items-center gap-2">
-                <Brain className="text-indigo-600" />
-                Saliency Map & Attention Visualization
+                <Microscope className="text-indigo-600" />
+                Explainable AI (Grad-CAM / Attention)
               </h3>
               <div className="flex items-center space-x-2">
-                 <span className="text-sm text-slate-600">Toggle Heatmap</span>
+                 <span className="text-sm text-slate-600">Overlay Map</span>
                  <button 
                   onClick={() => setShowOverlay(!showOverlay)}
                   className={`w-12 h-6 rounded-full transition-colors relative ${showOverlay ? 'bg-indigo-600' : 'bg-slate-300'}`}
@@ -173,7 +173,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Original */}
               <div className="space-y-2">
-                <p className="text-center text-xs font-semibold text-slate-500 uppercase">Original Scan</p>
+                <p className="text-center text-xs font-semibold text-slate-500 uppercase">Input Tensor</p>
                 <div className="relative rounded-lg overflow-hidden border border-slate-200 bg-black aspect-[4/3] flex items-center justify-center">
                   <img src={imageSrc} alt="Original" className="max-w-full max-h-full" />
                 </div>
@@ -181,7 +181,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
 
               {/* Heatmap Simulation */}
               <div className="space-y-2">
-                <p className="text-center text-xs font-semibold text-indigo-500 uppercase">Grad-CAM / Saliency Map</p>
+                <p className="text-center text-xs font-semibold text-indigo-500 uppercase">Saliency Map (Simulation)</p>
                 <div className="relative rounded-lg overflow-hidden border border-indigo-200 bg-black aspect-[4/3] flex items-center justify-center group">
                   {/* Base Image */}
                   <img src={imageSrc} alt="Base" className="max-w-full max-h-full opacity-80" />
@@ -199,7 +199,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                     <div className="absolute top-[45%] left-[55%] animate-pulse">
                         <div className="w-8 h-8 rounded-full border-2 border-red-500 shadow-[0_0_15px_rgba(239,68,68,0.6)]"></div>
                         <div className="absolute left-10 top-0 bg-black/80 text-white text-[10px] px-2 py-1 rounded whitespace-nowrap border-l-2 border-red-500">
-                          Critical Region (Hippocampus)
+                          High Activation (ViT Head)
                         </div>
                     </div>
                   )}
@@ -210,7 +210,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mt-4">
               <div className="bg-slate-50 p-4 rounded-lg border border-slate-100">
                 <h4 className="font-semibold text-slate-800 mb-2 flex items-center gap-2">
-                  <FileText size={16} /> Attention Analysis
+                  <FileText size={16} /> Feature Analysis
                 </h4>
                 <p className="text-sm text-slate-600 leading-relaxed">
                   {result.saliencyAnalysis}
@@ -219,7 +219,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
               
               <div className="bg-indigo-50 p-4 rounded-lg border border-indigo-100">
                 <h4 className="font-semibold text-indigo-900 mb-2 flex items-center gap-2">
-                  <AlertCircle size={16} /> Identified Biomarkers
+                  <AlertCircle size={16} /> Detected Visual Patterns
                 </h4>
                 <ul className="space-y-2">
                   {result.regionsOfInterest.map((region, idx) => (
@@ -233,7 +233,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             </div>
             
             <p className="text-xs text-slate-400 italic text-center">
-              * XAI Transparency: Warm regions (Red/Yellow) indicate areas that most influenced the CNN/ViT decision.
+              * XAI Transparency: Heatmaps indicate pixel regions contributing most to the class probability score.
             </p>
           </div>
         )}
@@ -244,7 +244,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
           onClick={onReset}
           className="px-6 py-2 text-sm font-medium text-slate-600 bg-white border border-slate-300 rounded-lg hover:bg-slate-50 transition-colors shadow-sm"
         >
-          New Analysis
+          Reset Analysis
         </button>
       </div>
     </div>

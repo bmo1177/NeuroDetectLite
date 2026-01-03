@@ -40,7 +40,6 @@ export const analyzeMRI = async (base64Image: string, mmseScore: number): Promis
     const ai = new GoogleGenAI({ apiKey });
     
     // Switch to gemini-2.0-flash-exp which is a valid model ID for vision tasks.
-    // gemini-2.5-flash-latest was incorrect and caused 404 errors.
     const modelId = "gemini-2.0-flash-exp";
 
     // Clean base64 string if it contains metadata
@@ -58,23 +57,23 @@ export const analyzeMRI = async (base64Image: string, mmseScore: number): Promis
           },
           {
             text: `
-              Act as an expert lightweight deep learning diagnostic system for Alzheimer's Detection.
-              
-              Context:
-              This analysis is part of a thesis on "Lightweight Deep Learning Models for Early Alzheimer’s Detection".
-              The model simulates a hybrid architecture (Compact CNN + Vision Transformer) optimized for low computational cost.
-              
+              Act as the inference engine for "NeuroDetect Lite", a research prototype for an MSc thesis on Lightweight Deep Learning for Early Alzheimer's Detection.
+              The system simulates a hybrid Compact CNN + Vision Transformer (ViT) architecture.
+
               Task:
-              1. Analyze the provided brain MRI scan.
-              2. Incorporate the provided clinical data: MMSE Score = ${mmseScore} (Mini-Mental State Examination, range 0-30. <24 indicates impairment).
-              3. Classify the patient into one of three stages: 
+              1. Analyze the provided T1-weighted brain MRI.
+              2. Integrate the clinical variable: MMSE Score = ${mmseScore} (Mini-Mental State Exam).
+              3. Perform a classification into one of three research classes:
                  - Cognitively Normal (CN)
                  - Mild Cognitive Impairment (MCI)
                  - Alzheimer's Disease (AD)
-              4. Explain the decision based on visual biomarkers (Hippocampal atrophy, Ventricular enlargement, Cortical thinning).
-              5. Describe the "Saliency Map" or "Attention" focus areas.
               
-              Output strict JSON.
+              Guidelines for Output:
+              - **Language Safety**: This is a research tool, not a medical device. Use phrases like "Model predicts...", "Patterns consistent with...", "Inference suggests...". NEVER say "The patient has..." or "Diagnosis is...".
+              - **Explainability**: Focus on visual biomarkers relevant to the architecture (e.g., "CNN features detect ventricular enlargement", "ViT attention heads focus on the temporal lobe").
+              - **Saliency**: Describe where a Grad-CAM or Attention Map would theoretically activate (e.g., hippocampus, entorhinal cortex).
+
+              Output strict JSON matching the schema.
             `
           }
         ]
@@ -94,11 +93,10 @@ export const analyzeMRI = async (base64Image: string, mmseScore: number): Promis
 
   } catch (error: any) {
     console.error("Analysis Error:", error);
-    // Return the specific error message to help debugging if it occurs again
     const errorMsg = error.message || "Unknown error";
     if (errorMsg.includes("404")) {
         throw new Error("Model not found. Please check region availability or API key permissions.");
     }
-    throw new Error(`Diagnostic failed: ${errorMsg}`);
+    throw new Error(`Inference failed: ${errorMsg}`);
   }
 };
