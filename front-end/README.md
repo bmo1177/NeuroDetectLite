@@ -1,20 +1,20 @@
-<div align="center">
-<img width="1200" height="475" alt="GHBanner" src="https://github.com/user-attachments/assets/0aa67016-6eaf-458a-adb2-6e31a0763ed6" />
-</div>
+# NeuroDetect Lite - Frontend
 
-# Run and deploy your AI Studio app
+This is the React-based frontend for the NeuroDetect Lite application.
 
-This contains everything you need to run your app locally.
+For a full project overview, architecture diagrams, and system screenshots, please refer to the **[Root README](../README.md)**.
 
-View your app in AI Studio: https://ai.studio/apps/drive/1OFM5B0f3d6m1GitKnLNG5PCWn0TQO8Vv
+## Local Development
 
-## Run Locally
+1. **Install dependencies**:
+   ```bash
+   npm install
+   ```
 
-**Prerequisites:**  Node.js
+2. **Run the app**:
+   ```bash
+   npm run dev
+   ```
 
-
-1. Install dependencies:
-   `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
-3. Run the app:
-   `npm run dev`
+3. **Check environment variables**:
+   Ensure you have a `.env.local` file configured with the correct backend API URL.
