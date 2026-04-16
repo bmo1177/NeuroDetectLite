@@ -1,0 +1,23 @@
+{
+  "No pruning": {
+    "sparsity_pct": 0.0,
+    "acc": 0.3778,
+    "macro_f1": 0.3333,
+    "mb": 2.56,
+    "ms": 9.66
+  },
+  "20% pruning": {
+    "sparsity_pct": 13.9,
+    "acc": 0.3111,
+    "macro_f1": 0.2545,
+    "mb": 2.56,
+    "ms": 13.45
+  },
+  "40% pruning": {
+    "sparsity_pct": 27.9,
+    "acc": 0.5333,
+    "macro_f1": 0.5291,
+    "mb": 2.56,
+    "ms": 9.68
+  }
+}

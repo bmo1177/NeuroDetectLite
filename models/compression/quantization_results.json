@@ -1,0 +1,29 @@
+{
+  "EfficientNet-B0": {
+    "fp32_mb": 16.96,
+    "int8_mb": 16.47,
+    "reduction_pct": 2.9,
+    "fp32_ms": 58.88,
+    "int8_ms": 46.66,
+    "fp32_f1": 0.3987,
+    "int8_f1": 0.3987
+  },
+  "MobileNetV3-Small": {
+    "fp32_mb": 6.45,
+    "int8_mb": 4.49,
+    "reduction_pct": 30.4,
+    "fp32_ms": 10.31,
+    "int8_ms": 10.64,
+    "fp32_f1": 0.4438,
+    "int8_f1": 0.4438
+  },
+  "LightAlzNet": {
+    "fp32_mb": 2.56,
+    "int8_mb": 2.01,
+    "reduction_pct": 21.5,
+    "fp32_ms": 9.26,
+    "int8_ms": 11.09,
+    "fp32_f1": 0.3333,
+    "int8_f1": 0.3333
+  }
+}

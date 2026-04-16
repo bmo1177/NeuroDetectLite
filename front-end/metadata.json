@@ -1,0 +1,5 @@
+{
+  "name": "NeuroDetect Lite (Research)",
+  "description": "MSc Thesis Prototype: Lightweight Deep Learning for Alzheimer’s Classification using MRI and MMSE scores.",
+  "requestFramePermissions": []
+}
