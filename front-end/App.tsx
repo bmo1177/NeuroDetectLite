@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import './index.css';
 import { Upload, Loader2, BrainCircuit, Activity, AlertCircle, FileText, Beaker, Zap, Shield, Key, Eye, EyeOff, Sparkles, Cpu } from 'lucide-react';
 import { AnalysisState, PredictionResult } from './types';
-import { analyzeMRI } from './services/inferenceService';
+import { analyzeMRI, isDemoMode } from './services/inferenceService';
 import ResultsDashboard from './components/ResultsDashboard';
 import { MmseCalculator } from './components/MmseCalculator';
 import ThesisContributions from './components/ThesisContributions';
@@ -24,6 +24,7 @@ const App: React.FC = () => {
   const [showBridgeAnimation, setShowBridgeAnimation] = useState(false);
   const [fileName, setFileName] = useState<string>('');
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [demoActive, setDemoActive] = useState(false);
 
   const handleFileChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -77,6 +78,7 @@ const App: React.FC = () => {
 
     try {
       const result = await analyzeMRI(inputData, state.mmse, backend.port, modelName);
+      setDemoActive(isDemoMode());
       setState(prev => ({ ...prev, status: 'complete', result }));
     } catch (error: any) {
       setState(prev => ({ ...prev, status: 'error', error: error.message }));
@@ -231,6 +233,28 @@ const App: React.FC = () => {
               <br />
               Optimized for edge deployment (~15ms inference) using multimodal data (MRI + Clinical Scores).
             </p>
+          </div>
+        )}
+
+        {/* Demo Mode Banner */}
+        {demoActive && activeTab === 'pipeline' && (
+          <div style={{
+            maxWidth: '48rem',
+            margin: '0 auto var(--space-xl)',
+            padding: '0.75rem 1.25rem',
+            background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08))',
+            border: '1px solid rgba(251, 191, 36, 0.3)',
+            borderRadius: 'var(--radius-lg)',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            fontSize: '0.8rem',
+            color: 'var(--amber-800)',
+          }}>
+            <Beaker style={{ width: 18, height: 18, flexShrink: 0, color: 'var(--amber-600)' }} />
+            <div>
+              <strong>Demo Mode</strong> — Backend unreachable. Results are simulated based on MMSE score and selected architecture. Connect to the FastAPI backend for real inference.
+            </div>
           </div>
         )}
 
@@ -559,7 +583,7 @@ const App: React.FC = () => {
                       </button>
                     )}
                     <p style={{ fontSize: '0.75rem', color: 'var(--primary)', marginTop: '0.5rem', textAlign: 'center' }}>
-                      Real inference running locally via FastAPI backend
+                      {demoActive ? 'Demo mode — results are simulated' : 'Real inference running locally via FastAPI backend'}
                     </p>
                   </div>
 
@@ -578,6 +602,23 @@ const App: React.FC = () => {
               {/* Results Dashboard */}
               {state.status === 'complete' && state.result && state.image && (
                 <div className="h-full animate-slide-in-bottom">
+                  {demoActive && (
+                    <div style={{
+                      padding: '0.6rem 1rem',
+                      background: 'linear-gradient(135deg, rgba(251, 191, 36, 0.12), rgba(245, 158, 11, 0.08))',
+                      border: '1px solid rgba(251, 191, 36, 0.3)',
+                      borderRadius: 'var(--radius-lg)',
+                      marginBottom: 'var(--space-md)',
+                      fontSize: '0.78rem',
+                      color: 'var(--amber-800)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                    }}>
+                      <Beaker style={{ width: 16, height: 16, flexShrink: 0 }} />
+                      <strong>Demo Mode:</strong> Simulated results. Connect to the FastAPI backend for real inference.
+                    </div>
+                  )}
                   <ResultsDashboard
                     result={state.result}
                     imageSrc={state.image}
