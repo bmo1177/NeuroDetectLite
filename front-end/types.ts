@@ -4,6 +4,17 @@ export enum AlzheimerClass {
   AD = "Alzheimer's Disease"
 }
 
+export interface MMSEGate {
+  alert_level: 'none' | 'info' | 'review' | 'escalate';
+  alert_message: string;
+  clinical_note: string;
+  mmse_interpretation: string;
+  prediction_trusted: boolean;
+  suggested_action: string;
+  gate_triggered: boolean;
+  flags: string[];
+}
+
 export interface PredictionResult {
   probabilities: {
     [key in AlzheimerClass]: number;
@@ -16,6 +27,8 @@ export interface PredictionResult {
   inference_time_ms?: number;
   model_used?: string;
   gradcam_base64?: string;
+  ref_slice_base64?: string;
+  mmse_gate?: MMSEGate;
 }
 
 export interface AnalysisState {

@@ -14,6 +14,9 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
   const [activeTab, setActiveTab] = useState<'classification' | 'xai'>('classification');
   const [showOverlay, setShowOverlay] = useState(true);
 
+  // Use the beautifully preprocessed axial central slice returned by the backend if available
+  const displayImage = result.ref_slice_base64 || imageSrc;
+
   const chartData = [
     { name: 'CN', fullName: 'Cognitively Normal', prob: result.probabilities[AlzheimerClass.CN] * 100 },
     { name: 'MCI', fullName: 'Mild Cognitive Impairment', prob: result.probabilities[AlzheimerClass.MCI] * 100 },
@@ -37,7 +40,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
     <div className="results-card animate-fade-in" id="results-dashboard">
 
       {/* Header Tabs */}
-      <div className="flex" style={{ borderBottom: '1px solid var(--slate-200)' }}>
+      <div className="flex" style={{ borderBottom: '1px solid var(--border-line)' }}>
         <button
           onClick={() => setActiveTab('classification')}
           className={`tab-button cursor-pointer ${activeTab === 'classification' ? 'active-classification' : ''}`}
@@ -60,20 +63,20 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
         </button>
       </div>
 
-      <div className="flex-1 overflow-y-auto p-6">
+      <div className="flex-1 overflow-y-auto" style={{ padding: 'var(--space-lg) var(--space-xl)' }}>
 
         {/* ─── CLASSIFICATION TAB ────────────────────────────── */}
         {activeTab === 'classification' && (
-          <div className="space-y-8 animate-fade-in">
+          <div className="space-y-8 animate-fade-in stagger-children">
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
 
               {/* Image Preview & Clinical Data */}
               <div className="space-y-4">
                 <div style={{
-                  background: 'var(--slate-100)',
+                  background: 'var(--surface-subtle)',
                   borderRadius: 'var(--radius-lg)',
                   padding: '0.25rem',
-                  border: '1px solid var(--slate-200)',
+                  border: '1px solid var(--border-line)',
                   aspectRatio: '1',
                   position: 'relative',
                   display: 'flex',
@@ -81,25 +84,24 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                   justifyContent: 'center',
                   overflow: 'hidden'
                 }}>
-                  <img src={imageSrc} alt="MRI Scan" className="object-contain max-w-full max-h-full" />
+                  <img src={displayImage} alt="MRI Scan" className="object-contain max-w-full max-h-full" />
                   <div style={{
                     position: 'absolute', top: '0.75rem', left: '0.75rem',
-                    background: 'rgba(0,0,0,0.7)', color: 'white', fontSize: '0.7rem',
-                    padding: '0.25rem 0.5rem', borderRadius: 'var(--radius-sm)',
-                    backdropFilter: 'blur(4px)'
+                    background: 'rgba(30, 41, 59, 0.9)', color: 'var(--page-bg)', fontSize: '0.7rem',
+                    padding: '0.25rem 0.5rem', borderRadius: 'var(--radius-sm)'
                   }}>
                     Input: T1-Weighted MRI (Preprocessed)
                   </div>
                 </div>
                 <div className="stat-card flex justify-between items-center">
                   <div>
-                    <span style={{ fontSize: '0.7rem', fontWeight: 600, color: 'var(--slate-500)', textTransform: 'uppercase' }}>Multimodal Feature</span>
+                    <span style={{ fontSize: 'var(--text-label)', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Multimodal Feature</span>
                     <div style={{ fontWeight: 500, color: 'var(--slate-800)' }}>MMSE Score</div>
                   </div>
                   <div className="tabular-nums" style={{
                     fontSize: '1.5rem',
                     fontWeight: 700,
-                    color: mmseScore < 24 ? 'var(--amber-600)' : 'var(--green-600)'
+                    color: mmseScore < 24 ? 'var(--semantic-amber)' : 'var(--semantic-green)'
                   }}>
                     {mmseScore}/30
                   </div>
@@ -109,7 +111,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
               {/* Stats */}
               <div className="flex flex-col justify-center space-y-6">
                 <div className="stat-card">
-                  <h3 style={{ color: 'var(--slate-500)', fontSize: '0.8rem', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
+                  <h3 style={{ color: 'var(--text-secondary)', fontSize: 'var(--text-label)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.05em', marginBottom: '0.25rem' }}>
                     Predicted Class
                   </h3>
                   <div className="flex items-center gap-3 flex-wrap">
@@ -122,8 +124,8 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                       </span>
                     )}
                   </div>
-                  <p style={{ color: 'var(--slate-600)', fontSize: '0.875rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
-                    Hybrid CNN-ViT Model Confidence: <strong>{(result.confidence * 100).toFixed(1)}%</strong>
+                  <p style={{ color: 'var(--text-body)', fontSize: '0.875rem', marginTop: '0.5rem', lineHeight: 1.5 }}>
+                    Lightweight 2.5D CNN Confidence: <strong>{(result.confidence * 100).toFixed(1)}%</strong>
                   </p>
                 </div>
 
@@ -143,7 +145,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                             const data = payload[0].payload;
                             return (
                               <div style={{
-                                background: 'white', padding: '0.5rem', border: '1px solid var(--slate-200)',
+                                background: 'var(--surface)', padding: '0.5rem', border: '1px solid var(--border-line)',
                                 boxShadow: 'var(--shadow-md)', borderRadius: 'var(--radius-md)', fontSize: '0.875rem'
                               }}>
                                 <p style={{ fontWeight: 600 }}>{data.fullName}</p>
@@ -165,9 +167,132 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
               </div>
             </div>
 
+            {/* MMSE Neurosymbolic Gate Card */}
+            {result.mmse_gate && (
+              <div 
+                style={{
+                  borderRadius: 'var(--radius-lg)',
+                  border: '1px solid',
+                  padding: '1.25rem',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                  background: 
+                    result.mmse_gate.alert_level === 'none' ? 'var(--semantic-green-bg)' :
+                    result.mmse_gate.alert_level === 'info' ? 'var(--semantic-blue-bg)' :
+                    result.mmse_gate.alert_level === 'review' ? 'var(--semantic-amber-bg)' :
+                    'var(--semantic-red-bg)',
+                  borderColor:
+                    result.mmse_gate.alert_level === 'none' ? 'var(--semantic-green)' :
+                    result.mmse_gate.alert_level === 'info' ? 'var(--semantic-blue)' :
+                    result.mmse_gate.alert_level === 'review' ? 'var(--semantic-amber)' :
+                    'var(--semantic-red)',
+                }}
+              >
+                {/* Header Row */}
+                <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', flexWrap: 'wrap' }}>
+                  <AlertCircle 
+                    style={{ 
+                      width: 22, 
+                      height: 22,
+                      color:
+                        result.mmse_gate.alert_level === 'none' ? 'var(--semantic-green)' :
+                        result.mmse_gate.alert_level === 'info' ? 'var(--semantic-blue)' :
+                        result.mmse_gate.alert_level === 'review' ? 'var(--semantic-amber)' :
+                        'var(--red-600)',
+                      flexShrink: 0
+                    }} 
+                  />
+                  <div style={{ flex: 1, minWidth: '200px' }}>
+                    <h4 
+                      style={{ 
+                        fontWeight: 700, 
+                        fontSize: '0.95rem',
+                        color:
+                          result.mmse_gate.alert_level === 'none' ? 'var(--green-700)' :
+                          result.mmse_gate.alert_level === 'info' ? 'var(--blue-900)' :
+                          result.mmse_gate.alert_level === 'review' ? 'var(--amber-700)' :
+                          'var(--red-700)',
+                      }}
+                    >
+                      Neurosymbolic Clinical MMSE Gate: {result.mmse_gate.alert_level.toUpperCase()}
+                    </h4>
+                    <p 
+                      style={{ 
+                        fontSize: '0.875rem', 
+                        marginTop: '0.125rem',
+                        fontWeight: 500,
+                        color:
+                          result.mmse_gate.alert_level === 'none' ? 'var(--green-700)' :
+                          result.mmse_gate.alert_level === 'info' ? 'var(--blue-800)' :
+                          result.mmse_gate.alert_level === 'review' ? 'var(--amber-700)' :
+                          'var(--red-700)',
+                      }}
+                    >
+                      {result.mmse_gate.alert_message}
+                    </p>
+                  </div>
+                  {/* Status Badge */}
+                  <span 
+                    style={{
+                      fontSize: '0.75rem',
+                      fontWeight: 700,
+                      padding: '0.25rem 0.5rem',
+                      borderRadius: 'var(--radius-sm)',
+                      background: result.mmse_gate.prediction_trusted ? '#dcfce7' : '#fee2e2',
+                      color: result.mmse_gate.prediction_trusted ? '#15803d' : '#b91c1c',
+                      textTransform: 'uppercase',
+                    }}
+                  >
+                    {result.mmse_gate.prediction_trusted ? 'Prediction Trusted' : 'Attention Required'}
+                  </span>
+                </div>
+
+                {/* Cognitive & Clinical Details */}
+                <div 
+                  style={{ 
+                    display: 'grid', 
+                    gridTemplateColumns: '1fr',
+                    gap: '0.75rem',
+                    borderTop: '1px solid var(--border-line)',
+                    paddingTop: '0.75rem',
+                    fontSize: '0.875rem',
+                    lineHeight: '1.5'
+                  }}
+                >
+                  <div>
+                    <strong style={{ display: 'block', color: 'var(--slate-700)', fontSize: 'var(--text-label)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      MMSE Score Assessment
+                    </strong>
+                    <span style={{ color: 'var(--text-body)', fontWeight: 500 }}>
+                      {result.mmse_gate.mmse_interpretation}
+                    </span>
+                  </div>
+
+                  <div>
+                    <strong style={{ display: 'block', color: 'var(--slate-700)', fontSize: 'var(--text-label)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      Clinical Consistency Analysis
+                    </strong>
+                    <span style={{ color: 'var(--text-body)' }}>
+                      {result.mmse_gate.clinical_note}
+                    </span>
+                  </div>
+
+                  <div>
+                    <strong style={{ display: 'block', color: 'var(--slate-700)', fontSize: 'var(--text-label)', textTransform: 'uppercase', marginBottom: '0.25rem' }}>
+                      Suggested Clinical Pathways
+                    </strong>
+                    <span style={{ color: 'var(--text-body)', fontStyle: 'italic' }}>
+                      {result.mmse_gate.suggested_action}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
             {/* Model Interpretation */}
             <div className="info-box">
-              <Info style={{ color: 'var(--blue-600)', flexShrink: 0, marginTop: '2px', width: 20, height: 20 }} />
+              <Info style={{ color: 'var(--semantic-blue)', flexShrink: 0, marginTop: '2px', width: 20, height: 20 }} />
               <div>
                 <h4 style={{ fontWeight: 600, color: 'var(--blue-900)', fontSize: '0.875rem' }}>Model Interpretation (Automated)</h4>
                 <p style={{ color: 'var(--blue-800)', fontSize: '0.875rem', marginTop: '0.25rem' }}>{result.explanation}</p>
@@ -175,9 +300,9 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             </div>
 
             {/* Bottom badges */}
-            <div className="flex gap-4 justify-center" style={{ borderTop: '1px solid var(--slate-100)', paddingTop: '1rem' }}>
+            <div className="flex gap-4 justify-center flex-wrap" style={{ borderTop: '1px solid var(--surface-subtle)', paddingTop: 'var(--space-lg)' }}>
               <span className="arch-badge"><Zap style={{ width: 12, height: 12 }} /> Inference Time: ~{result.inference_time_ms || 15}ms (Backend)</span>
-              <span className="arch-badge"><Brain style={{ width: 12, height: 12 }} /> Architecture: {result.model_used || "Hybrid"}</span>
+              <span className="arch-badge"><Brain style={{ width: 12, height: 12 }} /> Architecture: {result.model_used || "LightAlzNet"}</span>
             </div>
           </div>
         )}
@@ -187,11 +312,11 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
           <div className="space-y-6 animate-fade-in">
             <div className="flex justify-between items-center">
               <h3 style={{ fontSize: '1.1rem', fontWeight: 700, color: 'var(--slate-800)', display: 'flex', alignItems: 'center', gap: '0.5rem' }}>
-                <Microscope style={{ color: 'var(--indigo-600)', width: 22, height: 22 }} />
+                <Microscope style={{ color: 'var(--primary)', width: 22, height: 22 }} />
                 Explainable AI (Grad-CAM / Attention)
               </h3>
               <div className="flex items-center gap-2">
-                <span style={{ fontSize: '0.875rem', color: 'var(--slate-600)' }}>Overlay Map</span>
+                <span style={{ fontSize: '0.875rem', color: 'var(--text-body)' }}>Overlay Map</span>
                 <button
                   onClick={() => setShowOverlay(!showOverlay)}
                   className={`toggle-switch cursor-pointer ${showOverlay ? 'on' : 'off'}`}
@@ -207,26 +332,26 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               {/* Original */}
               <div className="space-y-2">
-                <p style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: 600, color: 'var(--slate-500)', textTransform: 'uppercase' }}>Input Tensor</p>
+                <p style={{ textAlign: 'center', fontSize: 'var(--text-label)', fontWeight: 600, color: 'var(--text-secondary)', textTransform: 'uppercase' }}>Input Tensor</p>
                 <div style={{
                   position: 'relative', borderRadius: 'var(--radius-lg)', overflow: 'hidden',
-                  border: '1px solid var(--slate-200)', background: '#000', aspectRatio: '4/3',
+                  border: '1px solid var(--border-line)', background: 'var(--text-heading)', aspectRatio: '4/3',
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                  <img src={imageSrc} alt="Original" className="max-w-full max-h-full" />
+                  <img src={displayImage} alt="Original" className="max-w-full max-h-full" />
                   <div className="scan-overlay" />
                 </div>
               </div>
 
               {/* Heatmap Simulation */}
               <div className="space-y-2">
-                <p style={{ textAlign: 'center', fontSize: '0.7rem', fontWeight: 600, color: 'var(--indigo-500)', textTransform: 'uppercase' }}>Saliency Map (Simulation)</p>
+                <p style={{ textAlign: 'center', fontSize: 'var(--text-label)', fontWeight: 600, color: 'var(--primary)', textTransform: 'uppercase' }}>Saliency Map (Simulation)</p>
                 <div style={{
                   position: 'relative', borderRadius: 'var(--radius-lg)', overflow: 'hidden',
-                  border: '1px solid var(--indigo-200)', background: '#000', aspectRatio: '4/3',
+                  border: '1px solid var(--accent-border)', background: 'var(--text-heading)', aspectRatio: '4/3',
                   display: 'flex', alignItems: 'center', justifyContent: 'center'
                 }}>
-                  <img src={imageSrc} alt="Base" style={{ maxWidth: '100%', maxHeight: '100%', opacity: 0.8 }} />
+                  <img src={displayImage} alt="Base" style={{ maxWidth: '100%', maxHeight: '100%', opacity: 0.8 }} />
 
                   {showOverlay && result.gradcam_base64 ? (
                     <img src={result.gradcam_base64} alt="Overlay" style={{
@@ -270,13 +395,13 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
                 <h4 style={{ fontWeight: 600, color: 'var(--slate-800)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
                   <FileText style={{ width: 16, height: 16 }} /> Feature Analysis
                 </h4>
-                <p style={{ fontSize: '0.875rem', color: 'var(--slate-600)', lineHeight: 1.6 }}>
+                <p style={{ fontSize: '0.875rem', color: 'var(--text-body)', lineHeight: 1.6 }}>
                   {result.saliencyAnalysis}
                 </p>
               </div>
 
               <div className="pattern-card">
-                <h4 style={{ fontWeight: 600, color: 'var(--indigo-900)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
+                <h4 style={{ fontWeight: 600, color: 'var(--primary-dark)', marginBottom: '0.5rem', display: 'flex', alignItems: 'center', gap: '0.5rem', fontSize: '0.9rem' }}>
                   <AlertCircle style={{ width: 16, height: 16 }} /> Detected Visual Patterns
                 </h4>
                 <ul className="space-y-2">
@@ -290,7 +415,7 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
               </div>
             </div>
 
-            <p style={{ fontSize: '0.75rem', color: 'var(--slate-400)', fontStyle: 'italic', textAlign: 'center' }}>
+            <p style={{ fontSize: '0.75rem', color: 'var(--text-muted)', fontStyle: 'italic', textAlign: 'center' }}>
               * XAI Transparency: Heatmaps indicate pixel regions contributing most to the class probability score.
             </p>
           </div>
@@ -299,9 +424,9 @@ const ResultsDashboard: React.FC<ResultsDashboardProps> = ({ result, imageSrc, m
 
       {/* Footer Actions */}
       <div style={{
-        padding: '1rem',
-        borderTop: '1px solid var(--slate-200)',
-        background: 'var(--slate-50)',
+        padding: 'var(--space-md) var(--space-xl)',
+        borderTop: '1px solid var(--border-line)',
+        background: 'var(--page-bg)',
         display: 'flex',
         justifyContent: 'flex-end'
       }}>
