@@ -1,0 +1,20 @@
+# NeuroDetect Lite — CPU-only requirements
+# Used for building the PyInstaller sidecar and for deployment.
+# The CPU-only torch wheel is ~200MB vs ~2GB for CUDA, keeping the installer small.
+#
+# To install:
+#   pip install -r requirements-cpu.txt
+
+--extra-index-url https://download.pytorch.org/whl/cpu
+
+torch
+torchvision
+fastapi
+uvicorn[standard]
+python-multipart
+Pillow
+numpy
+opencv-python-headless
+nibabel
+timm
+scikit-learn

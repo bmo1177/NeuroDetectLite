@@ -6,3 +6,6 @@ python-multipart
 Pillow
 numpy
 opencv-python-headless
+nibabel
+timm
+scikit-learn
