@@ -427,7 +427,7 @@ export const MmseCalculator: React.FC<MmseCalculatorProps> = ({ onApplyScore, cu
                     </div>
                     <span className="arch-badge">{motorImpaired ? 'PRORATED' : `${langScore} / 9 PTS`}</span>
                   </div>
-                  <div style={{ padding: '1rem', display: 'grid', gridTemplateColumns: '1fr md:grid-cols-2', gap: '0.75rem' }}>
+                  <div className="mmse-checkbox-grid" style={{ padding: '1rem', display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(220px, 1fr))', gap: '0.75rem' }}>
                     
                     <label className="flex items-center gap-2 cursor-pointer text-sm" style={{ userSelect: 'none' }}>
                       <input

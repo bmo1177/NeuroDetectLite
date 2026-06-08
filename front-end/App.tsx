@@ -106,7 +106,7 @@ const App: React.FC = () => {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between" style={{ height: '4rem' }}>
           <div className="flex items-center gap-3">
             <div className="logo-icon">
-              <img src="/logo.png" alt="NeuroDetect Logo" style={{ width: '100%', height: '100%', objectFit: 'cover', mixBlendMode: 'multiply' }} />
+              <BrainCircuit style={{ width: 24, height: 24, color: 'var(--primary)' }} />
             </div>
             <div>
               <h1 style={{ fontSize: '1.2rem', fontWeight: 700, color: 'var(--text-heading)', letterSpacing: '-0.02em', lineHeight: 1.2 }}>
@@ -118,7 +118,7 @@ const App: React.FC = () => {
             </div>
           </div>
 
-          <nav className="flex items-center gap-4" style={{ marginRight: 'auto', marginLeft: '2.5rem' }}>
+          <nav className="navbar-tabs flex items-center gap-4" style={{ marginRight: 'auto', marginLeft: '2.5rem' }}>
             <button
               onClick={() => setActiveTab('pipeline')}
               className="cursor-pointer"
@@ -191,7 +191,7 @@ const App: React.FC = () => {
             </button>
           </nav>
 
-          <div className="flex items-center gap-4">
+          <div className="flex items-center gap-4 navbar-right-section">
             {false && (
               <div className="sandbox-badge">
                 <Shield style={{ width: 14, height: 14 }} />
@@ -224,11 +224,11 @@ const App: React.FC = () => {
             maxWidth: '48rem',
             margin: '0 auto var(--space-3xl)'
           }}>
-            <h2 className="hero-title" style={{ textAlign: 'center' }}>
+            <h2 className="hero-title" style={{ textAlign: 'center', fontSize: 'clamp(1.5rem, 4vw, 2.25rem)', fontWeight: 700, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
               Lightweight Deep Learning for{' '}
               <span style={{ color: 'var(--primary)' }}>Alzheimer's Detection</span>
             </h2>
-            <p className="hero-subtitle" style={{ textAlign: 'center' }}>
+            <p className="hero-subtitle" style={{ textAlign: 'center', fontSize: 'var(--text-body)', color: 'var(--text-secondary)', lineHeight: 1.6, maxWidth: '40rem' }}>
               Evaluating <strong>compact lightweight architectures</strong> — including CNNs, Vision Transformers, and ensembles — for edge-deployed Alzheimer's screening.
               <br />
               Optimized for edge deployment (~15ms inference) using multimodal data (MRI + Clinical Scores).
@@ -440,7 +440,7 @@ const App: React.FC = () => {
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 'var(--space-sm)', textAlign: 'center' }}>
                       Or load a sample scan to test:
                     </p>
-                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                    <div className="sample-scan-grid" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                       {[
                         { file: 'sub-OAS30011_ses-d1671_T1w.nii.gz', label: 'AD Patient A', mmse: 22 },
                         { file: 'sub-OAS31469_sess-d0106_T1w.nii.gz', label: 'AD Patient B', mmse: 20 },
@@ -588,7 +588,7 @@ const App: React.FC = () => {
                   </div>
 
                   {/* Architecture Badges */}
-                  <div className="flex justify-center gap-4" style={{ marginTop: 'var(--space-lg)' }}>
+                  <div className="arch-badges-row flex justify-center gap-4" style={{ marginTop: 'var(--space-lg)' }}>
                     <span className="arch-badge">
                       <BrainCircuit style={{ width: 12, height: 12 }} /> Lightweight 2.5D CNN
                     </span>
