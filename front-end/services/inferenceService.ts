@@ -33,7 +33,8 @@ export const analyzeMRI = async (
     const controller = new AbortController();
     const timeout = setTimeout(() => controller.abort(), 60000);
 
-    const response = await fetch(`http://127.0.0.1:${port}/api/predict`, {
+    const API_BASE = import.meta.env.VITE_API_URL || `http://127.0.0.1:${port}`;
+    const response = await fetch(`${API_BASE}/api/predict`, {
       method: 'POST',
       body: formData,
       signal: controller.signal,

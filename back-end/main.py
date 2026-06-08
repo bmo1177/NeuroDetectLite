@@ -31,9 +31,9 @@ print(f"[NeuroDetect] CPU-only mode enforced | inference threads: {_threads}", f
 parser = argparse.ArgumentParser(description="NeuroDetect Lite Backend")
 parser.add_argument("--models-dir", type=str, default=None,
                     help="Path to the models directory (contains fp32/ and int8/ subdirs)")
-parser.add_argument("--host", type=str, default="127.0.0.1",
-                    help="Host to bind to (default: 127.0.0.1)")
-parser.add_argument("--port", type=int, default=8000,
+parser.add_argument("--host", type=str, default=os.environ.get("HOST", "0.0.0.0"),
+                    help="Host to bind to (default: 0.0.0.0)")
+parser.add_argument("--port", type=int, default=int(os.environ.get("PORT", 8000)),
                     help="Port to listen on (default: 8000)")
 args, _ = parser.parse_known_args()
 
