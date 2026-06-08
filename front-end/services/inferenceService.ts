@@ -200,7 +200,7 @@ export const analyzeMRI = async (
     // plus model loading + inference time
     const timeout = setTimeout(() => controller.abort(), 180000);
 
-    const API_BASE = import.meta.env.VITE_API_URL || `http://127.0.0.1:${port}`;
+    const API_BASE = import.meta.env.VITE_API_URL || "https://subarufly17-neurodetectlite.hf.space";
     const response = await fetch(`${API_BASE}/api/predict`, {
       method: 'POST',
       body: formData,
