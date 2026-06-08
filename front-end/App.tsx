@@ -411,6 +411,59 @@ const App: React.FC = () => {
                     )}
                   </div>
 
+                  {/* Quick Load Sample Scans */}
+                  <div style={{ marginBottom: 'var(--space-lg)' }}>
+                    <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 'var(--space-sm)', textAlign: 'center' }}>
+                      Or load a sample scan to test:
+                    </p>
+                    <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
+                      {[
+                        { file: 'sub-OAS30011_ses-d1671_T1w.nii.gz', label: 'AD Patient A', mmse: 22 },
+                        { file: 'sub-OAS31469_sess-d0106_T1w.nii.gz', label: 'AD Patient B', mmse: 20 },
+                        { file: 'sub-OAS30268_ses-d0096_run-01_T1w.nii.gz', label: 'AD Patient C', mmse: 18 },
+                      ].map((sample) => (
+                        <button
+                          key={sample.file}
+                          type="button"
+                          disabled={state.status === 'analyzing'}
+                          onClick={async () => {
+                            try {
+                              const resp = await fetch(`/sample-scans/${sample.file}`);
+                              if (!resp.ok) throw new Error('Sample not found');
+                              const blob = await resp.blob();
+                              const file = new File([blob], sample.file, { type: 'application/gzip' });
+                              setSelectedFile(file);
+                              setFileName(sample.file);
+                              setState(prev => ({ ...prev, image: 'nifti-placeholder', status: 'idle', error: undefined, mmse: sample.mmse }));
+                            } catch (err) {
+                              setState(prev => ({ ...prev, error: `Failed to load sample scan: ${sample.label}` }));
+                            }
+                          }}
+                          className="cursor-pointer"
+                          style={{
+                            flex: '1 1 auto',
+                            minWidth: '120px',
+                            padding: '0.5rem 0.75rem',
+                            fontSize: '0.75rem',
+                            fontWeight: 600,
+                            color: 'var(--primary)',
+                            background: 'var(--accent-surface)',
+                            border: '1px solid var(--accent-border)',
+                            borderRadius: 'var(--radius-md)',
+                            textAlign: 'center',
+                            transition: 'all var(--transition-fast)',
+                          }}
+                        >
+                          {sample.label}
+                          <br />
+                          <span style={{ fontSize: '0.65rem', color: 'var(--text-muted)', fontWeight: 500 }}>
+                            T1w NIfTI · MMSE {sample.mmse}
+                          </span>
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+
                   {/* MMSE Input */}
                   <div style={{ 
                     marginBottom: 'var(--space-xl)',
