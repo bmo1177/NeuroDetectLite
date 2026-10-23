@@ -1,0 +1,23 @@
+cff-version: 1.2.0
+message: "If you use this work, please cite the thesis and the repository."
+title: "A Neuro-Symbolic Clinical Decision Support System for Early Alzheimer's Detection"
+abstract: >-
+  A lightweight, neuro-symbolic clinical decision support system for early
+  Alzheimer's disease detection from structural MRI. The system combines a
+  7-channel 2.5D extraction pipeline, an ensemble of compact CNN and transformer
+  models, Grad-CAM explanations, and a deterministic MMSE-based clinical gate.
+authors:
+  - family-names: Belalia
+    given-names: Mohamed Oussama
+  - family-names: Belghitar
+    given-names: Kheireddine
+type: thesis
+year: 2026
+school: "Université Ibn Khaldoun, Tiaret"
+repository-code: "https://github.com/bmo1177/NeuroDetectLite"
+url: "https://github.com/bmo1177/NeuroDetectLite"
+license: MIT
+notes: >-
+  Master's thesis defended in 2026 with a mark of 18/20. The repository
+  contains the inference application and experiment notebooks; model weights
+  are distributed separately from the Git repository.

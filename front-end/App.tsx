@@ -438,13 +438,13 @@ const App: React.FC = () => {
                   {/* Quick Load Sample Scans */}
                   <div style={{ marginBottom: 'var(--space-lg)' }}>
                     <p style={{ fontSize: '0.8rem', color: 'var(--text-muted)', marginBottom: 'var(--space-sm)', textAlign: 'center' }}>
-                      Or load a sample scan to test:
+                      Or load a synthetic demo volume (not patient data):
                     </p>
                     <div className="sample-scan-grid" style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap', justifyContent: 'center' }}>
                       {[
-                        { file: 'sub-OAS30011_ses-d1671_T1w.nii.gz', label: 'AD Patient A', mmse: 22 },
-                        { file: 'sub-OAS31469_sess-d0106_T1w.nii.gz', label: 'AD Patient B', mmse: 20 },
-                        { file: 'sub-OAS30268_ses-d0096_run-01_T1w.nii.gz', label: 'AD Patient C', mmse: 18 },
+                        { file: 'synthetic-demo-a.nii.gz', label: 'Synthetic Demo A', mmse: 22 },
+                        { file: 'synthetic-demo-b.nii.gz', label: 'Synthetic Demo B', mmse: 20 },
+                        { file: 'synthetic-demo-c.nii.gz', label: 'Synthetic Demo C', mmse: 18 },
                       ].map((sample) => (
                         <button
                           key={sample.file}

@@ -22,3 +22,44 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+.venv/
+venv/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+
+# Model weights and archives (download from Hugging Face instead)
+models/**/*.pth
+models/**/*.pt
+models/**/*.onnx
+models/*.zip
+*.pth
+*.pt
+*.onnx
+
+# Imaging data: never commit patient or controlled-access datasets.
+# The synthetic demo volumes are the only exception.
+data/
+*.nii
+*.nii.gz
+!front-end/public/sample-scans/synthetic-demo-*.nii.gz
+
+# Local environment
+.env
+.env.*
+!.env.example
+
+# LaTeX build artifacts
+writing-article/*.aux
+writing-article/*.out
+writing-article/*.log
+writing-article/*.toc
+writing-article/*.synctex.gz
+
+# Old paper PDFs are not redistributed; cite the DOIs instead.
+OldPapers/
