@@ -103,7 +103,7 @@ torch.set_num_interop_threads(max(1, int(_threads) // 2))
 
 print(f"[NeuroDetect] torch CPU threads: {torch.get_num_threads()} | CUDA: {torch.cuda.is_available()}", flush=True)
 
-from fastapi import FastAPI, File, UploadFile, Form
+from fastapi import FastAPI, File, UploadFile, Form, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from typing import Optional
 from inference import predict
@@ -113,11 +113,24 @@ app = FastAPI(title="NeuroDetect Lite Backend")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
+    allow_origins=[
+        "https://neuro-detect-lite.vercel.app",
+        "https://subarufly17-neurodetectlite.hf.space",
+        "http://localhost:3001",
+        "http://localhost:5173",
+        "http://127.0.0.1:3001",
+        "http://127.0.0.1:5173",
+        "tauri://localhost",
+        "https://tauri.localhost",
+    ],
+    # Preview deployments use per-commit *.vercel.app hostnames.
+    allow_origin_regex=r"https://.*\.vercel\.app",
+    allow_credentials=False,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+MAX_UPLOAD_BYTES = 50 * 1024 * 1024  # 50 MB
 
 @app.get("/api/health")
 def health_check():
@@ -136,7 +149,9 @@ async def predict_endpoint(
     mmse: int = Form(...),
     model: str = Form("lightalznet")
 ):
-    contents = await image.read()
+    contents = await image.read(MAX_UPLOAD_BYTES + 1)
+    if len(contents) > MAX_UPLOAD_BYTES:
+        raise HTTPException(status_code=413, detail="Upload exceeds the 50 MB limit")
     result = predict(contents, mmse, model_name=model)
     return result
 
